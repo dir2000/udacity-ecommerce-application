@@ -48,10 +48,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
-        int strength = 10;
-        return new BCryptPasswordEncoder(strength, new SecureRandom());
-    }
+
 
 }
