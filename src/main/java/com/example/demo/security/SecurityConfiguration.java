@@ -10,7 +10,7 @@ import java.security.SecureRandom;
 public class SecurityConfiguration {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
-        int strength = 10;
+        int strength = 4;
         return new BCryptPasswordEncoder(strength, new SecureRandom());
     }
 }

@@ -5,14 +5,12 @@ import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.repositories.CartRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
 import com.example.demo.model.requests.CreateUserRequest;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.SecureRandom;
-import java.util.Random;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/user")
@@ -42,19 +40,20 @@ public class UserController {
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
 		if(createUserRequest.getPassword().length()<7 ||
 				!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())){
-			//System.out.println("Error - Either length is less than 7 or pass and conf pass do not match. Unable to create ",
-			//		createUserRequest.getUsername());
-			return ResponseEntity.badRequest().build();
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+					"Error - Either length is less than 7 or pass and conf pass do not match. Unable to create "
+					+ createUserRequest.getUsername());
 		}
+
+		Cart cart = new Cart();
+		cart = cartRepository.save(cart);
 
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
-		Cart cart = new Cart();
-		cart = cartRepository.save(cart);
-		user.setCart(cart);
-
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
+		user.setCart(cart);
 		userRepository.save(user);
+
 		return ResponseEntity.ok(user);
 	}
 	
