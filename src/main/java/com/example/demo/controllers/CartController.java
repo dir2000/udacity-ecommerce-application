@@ -21,18 +21,19 @@ import java.util.stream.IntStream;
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
-	
-	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
 	private CartRepository cartRepository;
-	
-	@Autowired
 	private ItemRepository itemRepository;
-	
+
+	@Autowired
+	public CartController(UserRepository userRepository, CartRepository cartRepository, ItemRepository itemRepository) {
+		this.userRepository = userRepository;
+		this.cartRepository = cartRepository;
+		this.itemRepository = itemRepository;
+	}
+
 	@PostMapping("/addToCart")
-	public ResponseEntity<Cart> addTocart(@RequestBody ModifyCartRequest request) {
+	public ResponseEntity<Cart> addToCart(@RequestBody ModifyCartRequest request) {
 		User user = userRepository.findByUsername(request.getUsername());
 		if(user == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
