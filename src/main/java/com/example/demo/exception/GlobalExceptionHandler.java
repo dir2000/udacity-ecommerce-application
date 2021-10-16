@@ -10,7 +10,7 @@ import java.util.Date;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<ErrorDTO> generateNotFoundException(ResponseStatusException ex) {
+    public ResponseEntity<ErrorDTO> generateExceptionResponse(ResponseStatusException ex) {
         ErrorDTO errorDTO = new ErrorDTO();
         errorDTO.setMessage(ex.getMessage());
         errorDTO.setStatus(String.valueOf(ex.getStatus().value()));
