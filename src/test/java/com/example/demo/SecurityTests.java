@@ -59,7 +59,8 @@ public class SecurityTests {
 		MvcResult mvcResult = performLoginAttempt(username, password);
 		String token = mvcResult.getResponse().getHeader("Authorization");
 		//then
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/user/" + username).header("Authorization", token)).andExpect(status().isOk());
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/user/" + username)
+				.header("Authorization", token)).andExpect(status().isOk());
 	}
 
 	@Test
@@ -67,14 +68,15 @@ public class SecurityTests {
 		//given
 		String token = "FooBar";
 		//then
-		mockMvc.perform(MockMvcRequestBuilders.get("/api/user/" + username).header("Authorization", token))
-				.andExpect(status().isUnauthorized());
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/user/" + username)
+				.header("Authorization", token)).andExpect(status().isUnauthorized());
 	}
 
 	private void createUser(String username, String password) throws Exception{
 		CreateUserRequest request = createUserRequest(username, password);
 		String registrationBody = objectToJSON(request);
-		mockMvc.perform(MockMvcRequestBuilders.post(SecurityConstants.SIGN_UP_URL).content(registrationBody).contentType("application/json"));
+		mockMvc.perform(MockMvcRequestBuilders.post(SecurityConstants.SIGN_UP_URL)
+				.content(registrationBody).contentType("application/json"));
 	}
 
 	private MvcResult performLoginAttempt(String username, String password) throws Exception{
@@ -82,8 +84,8 @@ public class SecurityTests {
 		loginData.put("username", username);
 		loginData.put("password", password);
 		String loginBody = objectToJSON(loginData);
-		return mockMvc.perform(MockMvcRequestBuilders.post(SecurityConstants.SIGN_IN_URL).content(loginBody).contentType("application/json"))
-				.andReturn();
+		return mockMvc.perform(MockMvcRequestBuilders.post(SecurityConstants.SIGN_IN_URL)
+				.content(loginBody).contentType("application/json")).andReturn();
 	}
 
 	private CreateUserRequest createUserRequest(String username, String password) {
