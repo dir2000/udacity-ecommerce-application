@@ -79,4 +79,47 @@ public class CartControllerMockTests {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void removeFromCartForNonExistentUser() {
+        //given
+        when(mockUserRepository.findByUsername(any())).thenReturn(null);
+        //when
+        ResponseEntity<Cart> responseEntity = cartController.removeFromСart(new ModifyCartRequest());
+        //then
+        HttpStatus expected = HttpStatus.NOT_FOUND;
+        HttpStatus actual = responseEntity.getStatusCode();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void removeNonExistentItemFromCart() {
+        //given
+        when(mockUserRepository.findByUsername(username)).thenReturn(new User());
+        when(mockItemRepository.findById(any())).thenReturn(Optional.empty());
+        ModifyCartRequest request = new ModifyCartRequest();
+        request.setUsername(username);
+        //when
+        ResponseEntity<Cart> responseEntity = cartController.removeFromСart(request);
+        //then
+        HttpStatus expected = HttpStatus.NOT_FOUND;
+        HttpStatus actual = responseEntity.getStatusCode();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void removeItemFromCart() {
+        //given
+        User user = new User();
+        user.setCart(new Cart());
+        when(mockUserRepository.findByUsername(username)).thenReturn(user);
+        when(mockItemRepository.findById(any())).thenReturn(Optional.of(new Item()));
+        ModifyCartRequest request = new ModifyCartRequest();
+        request.setUsername(username);
+        //when
+        ResponseEntity<Cart> responseEntity = cartController.removeFromСart(request);
+        //then
+        HttpStatus expected = HttpStatus.OK;
+        HttpStatus actual = responseEntity.getStatusCode();
+        assertEquals(expected, actual);
+    }
 }
