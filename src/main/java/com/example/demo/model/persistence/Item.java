@@ -20,7 +20,7 @@ public class Item {
 	
 	@Column(nullable = false)
 	@JsonProperty
-	private BigDecimal price;
+	private BigDecimal price = BigDecimal.valueOf(0);;
 	
 	@Column(nullable = false)
 	@JsonProperty

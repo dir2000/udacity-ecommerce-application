@@ -20,7 +20,7 @@ public class Cart {
 	@ManyToMany
 	@JsonProperty
 	@Column
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 	
 	@OneToOne(mappedBy = "cart")
 	@JsonProperty
@@ -28,7 +28,7 @@ public class Cart {
 	
 	@Column
 	@JsonProperty
-	private BigDecimal total;
+	private BigDecimal total = BigDecimal.valueOf(0);
 	
 	public BigDecimal getTotal() {
 		return total;

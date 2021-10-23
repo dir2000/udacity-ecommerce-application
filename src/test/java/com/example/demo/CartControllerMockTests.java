@@ -68,9 +68,13 @@ public class CartControllerMockTests {
         User user = new User();
         user.setCart(new Cart());
         when(mockUserRepository.findByUsername(username)).thenReturn(user);
-        when(mockItemRepository.findById(any())).thenReturn(Optional.of(new Item()));
+        Item item = new Item();
+        item.setId(1L);
+        when(mockItemRepository.findById(any())).thenReturn(Optional.of(item));
         ModifyCartRequest request = new ModifyCartRequest();
         request.setUsername(username);
+        request.setItemId(item.getId());
+        request.setQuantity(1);
         //when
         ResponseEntity<Cart> responseEntity = cartController.addToCart(request);
         //then
